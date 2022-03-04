@@ -18,12 +18,16 @@
 		<java.version>17</java.version>
 	</properties>
 
+	<modules>
+		<module>im_common</module>
+	</modules>
+
 	<dependencies>
 		<!--Spring cloud alibaba -->
 		<dependency>
 			<groupId>com.alibaba.cloud</groupId>
 			<artifactId>spring-cloud-alibaba-dependencies</artifactId>
-			<version>2.1.0.RELEASE</version>
+			<version>2021.1</version>
 			<type>pom</type>
 			<scope>import</scope>
 		</dependency>
@@ -49,7 +53,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.61</version>
+			<version>1.2.79</version>
 		</dependency>
 
 		<!-- lombook -->
@@ -63,23 +67,15 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<version>3.0.0</version>
 		</dependency>
 
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>
