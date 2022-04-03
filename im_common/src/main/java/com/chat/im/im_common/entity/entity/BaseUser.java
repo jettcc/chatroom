@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName(value = "abt_user")
+@TableName(value = "im_user", resultMap = "userResultMap¬")
 public class BaseUser extends BaseUuEntity { // 主键雪花算法
     @ApiModelProperty("openId")
     @TableField("openid")
@@ -29,6 +29,7 @@ public class BaseUser extends BaseUuEntity { // 主键雪花算法
     private String casId;
 
     @ApiModelProperty("姓名")
+    @TableField(value = "`name`")
     private String name;
 
     @ApiModelProperty("年级")
@@ -42,5 +43,4 @@ public class BaseUser extends BaseUuEntity { // 主键雪花算法
 
     @ApiModelProperty("昵称")
     private String nickName;
-
 }
