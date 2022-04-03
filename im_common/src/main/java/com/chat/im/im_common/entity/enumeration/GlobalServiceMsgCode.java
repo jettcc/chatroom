@@ -55,6 +55,7 @@ public enum GlobalServiceMsgCode {
     TIME_OUT(-1, "请求超时"),
 
     /* 小程序错误 */
+    WX_USER_GET_CODE_FAIL(40031, "获取code失败"),
     WX_USER_CODE_ERROR(40029, "code无效"),
     WX_HIGH_RISK_USER(40226, "高风险用户"),
     WX_MAXIMUM_NUMBER_OF_REQUEST(45011, "该code访问次数达到上限");
@@ -67,6 +68,16 @@ public enum GlobalServiceMsgCode {
         this.code = code;
         this.message = message;
     }
+
+    public static GlobalServiceMsgCode getMsgEnumByCode(Integer code) {
+        for (GlobalServiceMsgCode ele : values()) {
+            if (ele.getCode().equals(code)) {
+                return ele;
+            }
+        }
+        return WX_USER_GET_CODE_FAIL;
+    }
+
 
 
     /**

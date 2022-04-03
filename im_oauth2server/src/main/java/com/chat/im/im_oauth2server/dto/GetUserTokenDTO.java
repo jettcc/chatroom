@@ -8,12 +8,15 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
-@ApiModel("创建账号DTO")
+/**
+ * @author: AubreyChen in 2022/3/5
+ */
+@ApiModel("接收登录信息DTO")
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateAccountDTO {
-    @NotNull(message = "微信code不能为空")
-    @ApiModelProperty("微信code")
-    String code;
+public class GetUserTokenDTO {
+    @NotNull(message = "code不能为空")
+    @ApiModelProperty(value = "微信code", required = true)
+    String wx_code;
 }
