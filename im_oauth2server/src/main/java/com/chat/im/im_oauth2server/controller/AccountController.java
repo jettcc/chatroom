@@ -21,23 +21,16 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/auth/account")
 public class AccountController {
-    @Value("${security.oauth2.client.client-id}")
-    private String clientId;
-
-    @Value("${security.oauth2.client.client-secret}")
-    private String clientSecret;
-
     private final AccountService accountService;
 
     private final static String OAUTH_URL = "http://localhost:1225/oauth/check_token";
-
 
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
 
     @PostMapping("/login")
-    @ApiOperation(value = "登录接口",httpMethod = "POST")
+    @ApiOperation(value = "登录接口", httpMethod = "POST")
     public SystemMsgJsonResponse login(@RequestBody @Valid @Validated GetUserTokenDTO dto,
                                        @RequestHeader HttpHeaders httpHeaders) {
         var openId = accountService.wxcodeLogin(dto);
@@ -47,6 +40,4 @@ public class AccountController {
                     .getString("access_token"));
         }});
     }
-
-
 }

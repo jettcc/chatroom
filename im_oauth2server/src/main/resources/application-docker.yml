@@ -14,6 +14,9 @@ server:
 spring:
   application:
     name: im_oauth2-server
+  redis:
+    host: 127.0.0.1
+    database: 1
   cloud:
     nacos:
       discovery:
@@ -40,10 +43,10 @@ spring:
       filters: stat,wall,slf4j,config
 
 mybatis-plus:
-  type-aliases-package: com.achobeta.dgut.ab_common
+  type-enums-package: com.achobeta.dgut.ab_common
 
 logging:
-  config: log4j2-spring.xml
+  config: /usr/share/log4j2-spring.xml
 
 security:
   oauth2:
