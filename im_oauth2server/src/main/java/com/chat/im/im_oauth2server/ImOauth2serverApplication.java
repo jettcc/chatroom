@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 //@EnableOpenApi
-@MapperScan(basePackages = "com.achobeta.dgut.ab_common.mapper")
+@MapperScan(basePackages = "com.chat.im.im_common.mapper")
 @SpringBootApplication
 @EnableDiscoveryClient
 @ComponentScan(basePackages = {"com.chat.im.im_common", "com.chat.im.im_oauth2server"})

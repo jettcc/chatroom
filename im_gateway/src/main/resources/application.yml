@@ -1,7 +1,7 @@
 nacos-host: 127.0.0.1
 
 server:
-  port: 1226
+  port: 4396
 spring:
   main:
     web-application-type: reactive
