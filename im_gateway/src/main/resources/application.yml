@@ -1,0 +1,60 @@
+nacos-host: 127.0.0.1
+
+server:
+  port: 1226
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: ab_gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${nacos-host}:8848
+    gateway:
+      discovery:
+        locator:
+          # 让gateway可以发现nacos中的微服务
+          enabled: true
+          lowerCaseServiceId: true # 请求服务是小写的时候改成true（默认为false轻微服务必须是大写）
+      # 路由数组,路由就是指定当请求满足什么条件的时候，转到哪个微服务
+      routes:
+        - id: auth
+          uri: lb://oauth2-server
+          predicates:
+            - Path=/auth/**
+
+  #          filters:
+  #            - PreserveHostHeader
+  #          filters:
+  #            - StripPrefix=1
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: 'http://localhost:1225/auth/rsa/publicKey' #配置RSA的公钥访问地址
+#          jwk-set-uri: 'http://1.12.233.249:1225/auth/rsa/publicKey' #配置RSA的公钥访问地址
+logging:
+  config: log4j2-spring.xml
+
+secure:
+  ignore:
+    urls: #配置白名单路径
+      - "/actuator/**"
+      - "/auth/oauth/token"
+      - "/auth/account/login"
+      - "/chat/ext/group/create"
+      - "/swagger**/**"
+      - "/webjars/**"
+      - "/v3/**"
+      - "/doc.html"
+      - "/*/*/api-docs"
+
+# 示例:
+#        - id: consumer
+#          #          uri: http://localhost:9084
+#          uri: lb://consumer # lb 指的是负载均衡，后面跟的是具体微服务在nacos中的标识
+#          predicates:
+#            - Path=/prefix/consumer/**
+#          filters: # 过滤器(在请求传递过程中，对请求做一些手脚)
+#            - StripPrefix=1  # 在请求转发之前去掉一层路径,http://localhost:9081/prefix/consumer/service,实际请求会去掉prefix
