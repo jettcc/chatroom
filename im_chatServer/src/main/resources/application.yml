@@ -1,0 +1,13 @@
+# 应用名称
+spring:
+  application:
+    name: im_chatServer
+
+server:
+  port: 4330
+
+websocket:
+  port: 4301
+  url: /web
+
+
