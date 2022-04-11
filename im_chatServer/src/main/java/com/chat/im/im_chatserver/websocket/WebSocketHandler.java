@@ -54,7 +54,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             String key = ctx.channel().id().asLongText();
             //存储channel的id和用户的主键
             clientMap.put(key, msgReq.getUnionId());
-            log.info("接受客户端的消息......" + ctx.channel().remoteAddress() + "-参数[" + msgReq.getUnionId() + "]");
+            log.info("接受客户端的消息: [{}] - 参数: [{}]", ctx.channel().remoteAddress(), msgReq.getUnionId());
 
             if (!channelMap.containsKey(key)) {
                 //使用channel中的任务队列，做周期循环推送客户端消息，解决问题二和问题五
