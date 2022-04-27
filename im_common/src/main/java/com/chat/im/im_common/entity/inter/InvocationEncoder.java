@@ -5,15 +5,16 @@ import com.chat.im.im_common.entity.entity.Invocation;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * {@link Invocation} 编码器
  */
+@Log4j2
 public class InvocationEncoder extends MessageToByteEncoder<Invocation> {
-
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Invocation invocation, ByteBuf out) {
@@ -23,7 +24,7 @@ public class InvocationEncoder extends MessageToByteEncoder<Invocation> {
         out.writeInt(content.length);
         // 写入内容
         out.writeBytes(content);
-        logger.info("[encode][连接({}) 编码了一条消息({})]", ctx.channel().id(), invocation.toString());
+        log.info("[encode][连接({}) 编码了一条消息({})]", ctx.channel().id(), invocation.toString());
     }
 
 }

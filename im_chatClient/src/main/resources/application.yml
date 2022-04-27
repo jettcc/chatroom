@@ -39,3 +39,5 @@ spring:
       # 最大连接数
       max-active: 50
       filters: stat,wall,slf4j,config
+logging:
+  config: log4j2-spring.xml

@@ -16,7 +16,7 @@ public class MessageDispatcher extends SimpleChannelInboundHandler<Invocation> {
     @Autowired
     private MessageHandlerContainer messageHandlerContainer;
 
-    private final ExecutorService executor =  Executors.newFixedThreadPool(200);
+    private final ExecutorService executor = Executors.newFixedThreadPool(200);
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Invocation invocation) {
@@ -27,13 +27,9 @@ public class MessageDispatcher extends SimpleChannelInboundHandler<Invocation> {
         // 解析消息
         Message message = JSON.parseObject(invocation.getMessage(), messageClass);
         // 执行逻辑
-        executor.submit(new Runnable() {
-            @Override
-            public void run() {
-                // noinspection unchecked
-                messageHandler.execute(ctx.channel(), message);
-            }
-
+        executor.submit(() -> {
+            // noinspection unchecked
+            messageHandler.execute(ctx.channel(), message);
         });
     }
 
