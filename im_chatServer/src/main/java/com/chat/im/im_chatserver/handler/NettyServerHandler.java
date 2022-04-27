@@ -19,7 +19,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Autowired
     private NettyChannelManager channelManager;
 
-
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         // 从管理器中添加
