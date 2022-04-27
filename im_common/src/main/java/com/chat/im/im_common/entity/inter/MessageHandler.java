@@ -1,7 +1,9 @@
 package com.chat.im.im_common.entity.inter;
 
 import io.netty.channel.Channel;
-
+/**
+ * @author: chovychan in 2022/4/27
+ */
 public interface MessageHandler<T extends Message> {
 
     /**

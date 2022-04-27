@@ -1,4 +1,4 @@
-package com.chat.im.im_chatserver.heartbeat;
+package com.chat.im.im_common.hearbeat;
 
 import com.chat.im.im_common.entity.inter.Message;
 

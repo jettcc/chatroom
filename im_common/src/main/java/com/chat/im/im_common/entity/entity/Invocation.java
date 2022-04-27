@@ -35,5 +35,4 @@ public class Invocation {
         this.message = JSON.toJSONString(message);
     }
     
-    // ... 省略 setter、getter、toString 方法
 }
