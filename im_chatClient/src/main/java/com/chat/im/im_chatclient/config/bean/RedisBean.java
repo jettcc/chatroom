@@ -1,4 +1,4 @@
-package com.chat.im.im_chatclient.config.redis;
+package com.chat.im.im_chatclient.config.bean;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -14,8 +14,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
+/**
+ * redis bean
+ * @author: chovychan in 2022/4/27
+ */
 @Configuration
-public class RedisConfig {
+public class RedisBean {
 
     @Bean
     @SuppressWarnings("all")

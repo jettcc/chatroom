@@ -12,7 +12,10 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+/**
+ * redis 事务配置
+ * @author: chovychan in 2022/4/27
+ */
 @Configuration
 public class CustomRedisTemplate<K, V> extends RedisTemplate<K, V> {
     private boolean enableTransactionSupport = false;
