@@ -1,6 +1,6 @@
-package com.chat.im.im_chatclient.netty;
+package com.chat.im.im_chatclient.config.netty;
 
-import com.chat.im.im_chatclient.handler.NettyClientHandlerInitializer;
+import com.chat.im.im_chatclient.config.handler.NettyClientHandlerInitializer;
 import com.chat.im.im_common.entity.entity.Invocation;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;

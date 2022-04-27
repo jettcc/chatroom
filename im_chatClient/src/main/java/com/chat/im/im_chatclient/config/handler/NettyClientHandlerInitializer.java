@@ -1,4 +1,4 @@
-package com.chat.im.im_chatclient.handler;
+package com.chat.im.im_chatclient.config.handler;
 
 import com.chat.im.im_common.entity.inter.InvocationDecoder;
 import com.chat.im.im_common.entity.inter.InvocationEncoder;

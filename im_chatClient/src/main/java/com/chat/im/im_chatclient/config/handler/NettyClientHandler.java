@@ -1,6 +1,6 @@
-package com.chat.im.im_chatclient.handler;
+package com.chat.im.im_chatclient.config.handler;
 
-import com.chat.im.im_chatclient.netty.NettyClient;
+import com.chat.im.im_chatclient.config.netty.NettyClient;
 import com.chat.im.im_common.entity.entity.Invocation;
 import com.chat.im.im_common.hearbeat.HeartbeatRequest;
 import io.netty.channel.ChannelFutureListener;

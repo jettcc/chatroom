@@ -1,5 +1,5 @@
 
-package com.chat.im.im_chatclient.hearbeat;
+package com.chat.im.im_chatclient.config.hearbeat;
 
 import com.chat.im.im_common.entity.inter.MessageHandler;
 import com.chat.im.im_common.hearbeat.HeartbeatResponse;
