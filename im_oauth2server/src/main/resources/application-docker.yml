@@ -51,12 +51,12 @@ logging:
 security:
   oauth2:
     client:
-      access-token-uri: http://${serverLocalhost}:1225/auth/oauth/token
-      user-authorization-uri: http://${serverLocalhost}:1225/auth/oauth/authorize
+      access-token-uri: http://${serverLocalhost}:4300/auth/oauth/token
+      user-authorization-uri: http://${serverLocalhost}:4300/auth/oauth/authorize
       client-id: resource
       client-secret: secret
     resource:
-      userInfoUri: http://${serverLocalhost}:1225/auth/api/member
+      userInfoUri: http://${serverLocalhost}:4300/auth/api/member
       prefer-token-info: false
 
 xcx-appid: wxd2c2de793546cf5d # 小程序id

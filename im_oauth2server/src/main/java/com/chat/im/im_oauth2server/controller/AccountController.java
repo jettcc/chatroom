@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 /**
- * @author Keyvonchen in 2021/9/15
+ * @author: chovychan in 2022/5/8
  */
 @Api(tags = "api- 权限认证")
 @RestController
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class AccountController {
     private final AccountService accountService;
 
-    private final static String OAUTH_URL = "http://localhost:1225/oauth/check_token";
+    private final static String OAUTH_URL = "http://localhost:4300/oauth/check_token";
 
     public AccountController(AccountService accountService) {
         this.accountService = accountService;

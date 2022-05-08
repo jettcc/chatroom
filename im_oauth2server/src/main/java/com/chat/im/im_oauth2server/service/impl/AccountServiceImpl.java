@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final static String WX_LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session";
 
-    private final static String OAUTH_TOKEN_URL = "http://localhost:1225/oauth/token";
+    private final static String OAUTH_TOKEN_URL = "http://localhost:4300/oauth/token";
 
     @Override
     public String wxcodeLogin(GetUserTokenDTO dto) {
