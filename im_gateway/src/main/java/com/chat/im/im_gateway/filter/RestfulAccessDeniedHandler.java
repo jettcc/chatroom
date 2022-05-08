@@ -1,6 +1,6 @@
 package com.chat.im.im_gateway.filter;
 
-import com.achobeta.dgut.ab_common.entity.enumeration.GlobalServiceMsgCode;
+import com.chat.im.im_common.entity.enumeration.GlobalServiceMsgCode;
 import com.chat.im.im_gateway.utils.RespUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.AccessDeniedException;

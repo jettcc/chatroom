@@ -1,8 +1,8 @@
 package com.chat.im.im_gateway.utils;
 
 import cn.hutool.json.JSONUtil;
-import com.achobeta.dgut.ab_common.entity.enumeration.GlobalServiceMsgCode;
-import com.achobeta.dgut.ab_common.utils.SystemMsgJsonResponse;
+import com.chat.im.im_common.entity.enumeration.GlobalServiceMsgCode;
+import com.chat.im.im_common.utils.SystemMsgJsonResponse;
 import org.apache.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

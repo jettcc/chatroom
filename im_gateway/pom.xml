@@ -14,8 +14,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.achobeta.dgut</groupId>
-            <artifactId>ab_common</artifactId>
+            <groupId>com.chat.im</groupId>
+            <artifactId>im_common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
