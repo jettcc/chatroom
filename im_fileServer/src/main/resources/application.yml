@@ -1,0 +1,15 @@
+nacos-host: 127.0.0.1
+
+spring:
+  application:
+    name: im_fileServer
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${nacos-host}:8848
+server:
+  port: 1226
+
+
+logging:
+  config: log4j2-spring.xml

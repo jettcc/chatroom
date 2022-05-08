@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.chat.im</groupId>
+        <artifactId>IMChatRoom</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>im_fileServer</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>im_fileServer</name>
+    <description>im_fileServer</description>
+
+   <dependencies>
+       <dependency>
+           <groupId>com.chat.im</groupId>
+           <artifactId>im_common</artifactId>
+           <version>0.0.1-SNAPSHOT</version>
+       </dependency>
+       <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+       <dependency>
+           <groupId>org.slf4j</groupId>
+           <artifactId>slf4j-api</artifactId>
+           <version>1.7.36</version>
+       </dependency>
+       <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+       <dependency>
+           <groupId>org.slf4j</groupId>
+           <artifactId>slf4j-simple</artifactId>
+           <version>1.7.36</version>
+       </dependency>
+       <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter</artifactId>
+           <exclusions>
+               <exclusion>
+                   <groupId>org.springframework.boot</groupId>
+                   <artifactId>spring-boot-starter-logging</artifactId>
+               </exclusion>
+           </exclusions>
+       </dependency>
+       <!-- nacos客户端 -->
+       <dependency>
+           <groupId>com.alibaba.cloud</groupId>
+           <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+           <version>2.2.5.RELEASE</version>
+       </dependency>
+       <!-- 腾讯云COS服务-->
+       <dependency>
+           <groupId>com.qcloud</groupId>
+           <artifactId>cos_api</artifactId>
+           <version>5.6.54</version>
+       </dependency>
+   </dependencies>
+
+</project>
