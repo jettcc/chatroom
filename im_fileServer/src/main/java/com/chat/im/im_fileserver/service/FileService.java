@@ -27,7 +27,6 @@ public interface FileService {
      * 上传文件
      *
      * @param file 文件
-     * @return
      */
     UploadResult upload(MultipartFile file, String path);
 
@@ -35,7 +34,6 @@ public interface FileService {
      * 访问文件
      *
      * @param key 文件key
-     * @return
      */
     String preview(String key);
 }

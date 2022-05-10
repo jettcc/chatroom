@@ -3,10 +3,15 @@ package com.chat.im.im_fileserver.controller;
 import com.chat.im.im_common.utils.SystemMsgJsonResponse;
 import com.chat.im.im_fileserver.service.FileService;
 import com.qcloud.cos.model.UploadResult;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * @author: chovychan in 2022/5/8
+ */
+@Api(tags = "文件服务")
 @RestController
 @RequestMapping("/file/common")
 public class FileController {
