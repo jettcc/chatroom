@@ -35,8 +35,8 @@ import java.util.concurrent.Executors;
 public class FileServiceImpl implements FileService {
     private static final String CLASS_NAME = "FileServiceImpl";
     private static final String BUCKET_NAME = "imchatserver-1306179590";
-    private static final String SECRET_ID = "AKIDjIYYNvCCvNYS5SYMtAAtMZVAYfW5NO9d";
-    private static final String SECRET_KEY = "HI2WjgMltkKdfQt50e16vSCfrte8LHwK";
+    private static final String SECRET_ID = "";
+    private static final String SECRET_KEY = "";
     // 限制文件大小5M;
     private static final Integer FILE_SIZE = 10;
     private static final FILE_UNIT FILE_TYPE = FILE_UNIT.MB;
