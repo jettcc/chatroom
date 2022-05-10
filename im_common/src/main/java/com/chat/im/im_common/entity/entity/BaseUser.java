@@ -11,7 +11,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
- * @author Keyvonchen in 2021/10/8
+ * @author: chovychan in 2022/5/8
  */
 
 @ApiModel("用户实体")
@@ -19,24 +19,15 @@ import lombok.experimental.Accessors;
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName(value = "im_user", resultMap = "userResultMap¬")
+@TableName(value = "im_user", resultMap = "userResultMap")
 public class BaseUser extends BaseUuEntity { // 主键雪花算法
     @ApiModelProperty("openId")
     @TableField("openid")
     private String openId;
 
-    @ApiModelProperty("学号")
-    private String casId;
-
     @ApiModelProperty("姓名")
     @TableField(value = "`name`")
     private String name;
-
-    @ApiModelProperty("年级")
-    private Integer year;
-
-    @ApiModelProperty("二级组织")
-    private String department;
 
     @ApiModelProperty("头像")
     private String avatar;
