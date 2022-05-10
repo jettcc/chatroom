@@ -23,7 +23,7 @@ public class SwaggerConfig {
     public Docket createRestApi() {
         return new Docket(DocumentationType.OAS_30)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.achobeta.dgut.ab_oauth2server"))
+                .apis(RequestHandlerSelectors.basePackage("com.chat.im.im_oauth2server"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalRequestParameters(globalRequestParameters())

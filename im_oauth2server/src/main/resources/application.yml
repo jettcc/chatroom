@@ -4,21 +4,18 @@ aliyundbusername: im_chat
 aliyundbpassword: XuVe1kZCvAGgM5VpZ2+RtjYlnv1GQyo3WGsB737shprmrkNfUL5bjD1ol94odgmvQjjzEEaLqqldWMmJRuULWg==
 public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIC63m5n7W98ZCLl3a/92Sia3JXqdr5QAcI3VloRg780u3V3sBU4sXW0gsWqYWha2rzlxV4tprZRpMtbuFYGpoECAwEAAQ==
 serverLocalhost: 127.0.0.1 #http://121.196.144.146/
-#nacos-host: 1.12.233.249
-nacos-host: 119.91.131.147
-#nacos-host: 127.0.0.1
+nacos-host: 127.0.0.1
 
 server:
   port: 4300
 
 spring:
   application:
-    name: im_oauth2-server
+    name: im-oauth2-server
   cloud:
     nacos:
       discovery:
         server-addr: ${nacos-host}:8848
-#        ip: 121.196.144.146
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     # mysql属性配置
@@ -40,7 +37,7 @@ spring:
       filters: stat,wall,slf4j,config
 
 mybatis-plus:
-  type-aliases-package: com.achobeta.dgut.ab_common
+  type-aliases-package: com.chat.im.im_common
 
 logging:
   config: log4j2-spring.xml

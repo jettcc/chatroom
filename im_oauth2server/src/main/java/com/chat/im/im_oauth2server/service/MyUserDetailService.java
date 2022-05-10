@@ -44,9 +44,9 @@ public class MyUserDetailService implements UserDetailsService {
         qw.eq("openid", openId);
         return Optional.ofNullable(userMapper.selectOne(qw)).orElseGet(() -> {
             BaseUser user = new BaseUser();
-            log.info("<< Oauth2Service.MyUserDetailService::findUser >> info: 生成新的user记录, id:[{}]", user.getId());
             user.setOpenId(openId);
             userMapper.insert(user);
+            log.info("<< Oauth2Service.MyUserDetailService::findUser >> info: 生成新的user记录, id:[{}]", user.getId());
             return user;
         });
     }
