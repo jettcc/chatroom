@@ -5,10 +5,7 @@
     <resultMap id="userResultMap" type="com.chat.im.im_common.entity.entity.BaseUser">
         <id property="id" jdbcType="VARCHAR" column="id"/>
         <result property="openId" jdbcType="VARCHAR" column="openid"/>
-        <result property="casId" jdbcType="VARCHAR" column="cas_id"/>
         <result property="name" jdbcType="VARCHAR" column="name"/>
-        <result property="year" jdbcType="INTEGER" column="year"/>
-        <result property="department" jdbcType="VARCHAR" column="department"/>
         <result property="avatar" jdbcType="VARCHAR" column="avatar"/>
         <result property="nickName" jdbcType="VARCHAR" column="nick_name"/>
     </resultMap>

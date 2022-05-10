@@ -16,15 +16,19 @@ public class EnumUtil {
     /**
      * @param clazz 枚举类型
      */
-    @SneakyThrows
     public static JSONObject getEnumTypeJsonArray(Class<? extends Enum> clazz) {
         JSONObject jsonObject = new JSONObject();
         Enum[] es = clazz.getEnumConstants();
-        Method getName = clazz.getMethod("getName");
-        for (Enum e : es) {
-            String chineseName = getName.invoke(e).toString();
-            jsonObject.put(e.name(), chineseName);
+        try {
+            Method getName = clazz.getMethod("getName");
+            for (Enum e : es) {
+                String chineseName = getName.invoke(e).toString();
+                jsonObject.put(e.name(), chineseName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return jsonObject;
     }
 }

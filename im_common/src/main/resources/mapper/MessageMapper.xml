@@ -1,0 +1,9 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chat.im.im_common.mapper.MessageMapper">
+    <resultMap id="messageResultMap" type="com.chat.im.im_common.entity.entity.Message">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="have_read" jdbcType="TINYINT" javaType="Boolean" property="haveRead"/>
+    </resultMap>
+</mapper>
