@@ -6,7 +6,7 @@ spring:
   main:
     web-application-type: reactive
   application:
-    name: im_gateway
+    name: im-gateway
   cloud:
     nacos:
       discovery:
@@ -20,11 +20,11 @@ spring:
       # 路由数组,路由就是指定当请求满足什么条件的时候，转到哪个微服务
       routes:
         - id: auth
-          uri: lb://im_oauth2-server
+          uri: lb://im-oauth2-server
           predicates:
             - Path=/auth/**
         - id: file
-          uri: lb://im_fileServer
+          uri: lb://im-fileServer
           predicates:
             - Path=/file/**
   #          filters:

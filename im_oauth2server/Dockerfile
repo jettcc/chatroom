@@ -1,3 +1,4 @@
+
 FROM openjdk
 
 # Add the service itself

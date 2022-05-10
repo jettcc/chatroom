@@ -1,7 +1,6 @@
-package com.chat.im.im_chatclient.source;
+package com.chat.im.im_chatserver.component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chat.im.im_chatclient.mapper.RedisMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
