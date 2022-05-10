@@ -23,6 +23,7 @@
     <modules>
         <module>im_common</module>
         <module>im_oauth2server</module>
+        <module>im_fileServer</module>
     </modules>
 
     <dependencies>
