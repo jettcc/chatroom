@@ -1,6 +1,7 @@
 package com.chat.im.im_chatserver.config.netty;
 
 import com.chat.im.im_chatserver.config.chat.ChatHandler;
+import com.chat.im.im_chatserver.config.heatbeat.HeartBeatHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -8,6 +9,8 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
+
 /**
  * websocket初始化器
  * @author: chovychan in 2022/5/8
@@ -37,7 +40,11 @@ public class WebSocketInitializer extends ChannelInitializer<SocketChannel> {
          * 对于websocket来讲，都是以frames进行传输的，不同的数据类型对应的frames也不同
          */
         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
-
+        // 针对客户端，如果在1分钟时没有向服务端发送读写心跳(ALL)，则主动断开
+        // 如果是读空闲或者写空闲，不处理
+        pipeline.addLast(new IdleStateHandler(8, 10, 12));
+        // 自定义的空闲状态检测
+        pipeline.addLast(new HeartBeatHandler());
         // 自定义的handler
         pipeline.addLast(new ChatHandler());
     }

@@ -28,7 +28,7 @@ import java.util.*;
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     private static final String TAG = "ChatHandler";
     // 用于记录和管理所有客户端的channel
-    private static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    public static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
