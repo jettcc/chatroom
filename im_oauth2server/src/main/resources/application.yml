@@ -4,7 +4,7 @@ aliyundbusername: im_chat
 aliyundbpassword: XuVe1kZCvAGgM5VpZ2+RtjYlnv1GQyo3WGsB737shprmrkNfUL5bjD1ol94odgmvQjjzEEaLqqldWMmJRuULWg==
 public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIC63m5n7W98ZCLl3a/92Sia3JXqdr5QAcI3VloRg780u3V3sBU4sXW0gsWqYWha2rzlxV4tprZRpMtbuFYGpoECAwEAAQ==
 serverLocalhost: 127.0.0.1 #http://121.196.144.146/
-nacos-host: 127.0.0.1
+nacos-host: 1.12.233.249
 
 server:
   port: 4300

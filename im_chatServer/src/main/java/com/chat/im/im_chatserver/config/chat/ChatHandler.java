@@ -72,8 +72,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
         // 发生异常之后关闭连接（关闭channel），随后从ChannelGroup中移除
         log.error("客户端异常, error msg: {}", e.getMessage());
-        ctx.channel().close();
-        channels.remove(ctx.channel());
+        channels.writeAndFlush(new TextWebSocketFrame("客户端异常, error msg: " + e.getMessage()));
+//        ctx.channel().close();
+//        channels.remove(ctx.channel());
     }
 
     public ChannelGroup getChannels() {

@@ -32,7 +32,7 @@ spring:
           predicates:
             - Path=/chat/**
         - id: websocket
-          uri: ws://localhost:4302/ws
+          uri: ws://im-chat-server:4302/ws
           predicates:
             - Path=/ws
             - Header=Connection,Upgrade
@@ -44,7 +44,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: 'http://localhost:4300/auth/rsa/publicKey' #配置RSA的公钥访问地址
+          jwk-set-uri: 'http://im-oauth2-server:4300/auth/rsa/publicKey' #配置RSA的公钥访问地址
 #          jwk-set-uri: 'http://1.12.233.249:1225/auth/rsa/publicKey' #配置RSA的公钥访问地址
 logging:
   config: log4j2-spring.xml
@@ -52,7 +52,6 @@ logging:
 secure:
   ignore:
     urls: #配置白名单路径
-      - "/ws/**"
       - "/actuator/**"
       - "/auth/oauth/token"
       - "/auth/account/login"

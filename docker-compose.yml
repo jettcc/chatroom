@@ -1,12 +1,63 @@
-version: "2.7"
+version: "3.3"
 services:
+  im-gateway-server:
+    image: im-gateway-server:0.0.1
+    build:
+      context: build/gateway
+      dockerfile: Dockerfile
+      args:
+        GATEWAY_JAR: gateway.jar
+    tty: true
+    links:
+      - im-oauth2-server
+      - im-file-server
+      - im-chat-sever
+    volumes:
+      - ./im_gateway/log:/log
+    ports:
+      - "4396:4396"
+    networks:
+      - server
   im-oauth2-server:
     image: im-oauth2-server:0.0.1
     build:
-      context: im_oauth2server/
-      args:
-        JAR_FILE: im_oauth2server-0.0.1-SNAPSHOT.jar
+      context: build/oauth
       dockerfile: Dockerfile
-
+      args:
+        OAUTH_JAR: oauth2server.jar
+    networks:
+      - server
+    tty: true
+    volumes:
+      - ./im_oauth2server/log:/log
     ports:
       - "4300:4300"
+  im-file-server:
+    image: im-file-server
+    build:
+      context: build/file
+      dockerfile: Dockerfile
+      args:
+        FILE_JAR: fileServer.jar
+    networks:
+      - server
+    tty: true
+    ports:
+      - "4335:4335"
+  im-chat-sever:
+    image: im-chat-server
+    build:
+      context: build/chat
+      dockerfile: Dockerfile
+      args:
+        CHAT_JAR: chatServer.jar
+    networks:
+      - server
+    tty: true
+    ports:
+      - "4302:4302"
+      - "4330:4330"
+
+networks:
+  server:
+    driver: bridge

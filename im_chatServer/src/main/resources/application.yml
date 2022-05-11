@@ -6,19 +6,16 @@ public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIC63m5n7W98ZCLl3a/92Sia3JXqdr5QAcI3
 serverLocalhost: 127.0.0.1 #http://121.196.144.146/
 #nacos-host: 1.12.233.249
 #nacos-host: 119.91.131.147
-nacos-host: 127.0.0.1
+nacos-host: 1.12.233.249
 redis-host: 1.12.233.249
 
 server:
   port: 4330
 
-netty:
-  port: 4302
-
 # 应用名称
 spring:
   application:
-    name: im_chatServer
+    name: im-chat-server
   redis:
     host: ${redis-host}
     database: 2
