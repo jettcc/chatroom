@@ -7,7 +7,7 @@ serverLocalhost: 127.0.0.1 #http://121.196.144.146/
 #nacos-host: 1.12.233.249
 #nacos-host: 119.91.131.147
 nacos-host: 127.0.0.1
-redis-host: 119.91.131.147
+redis-host: 1.12.233.249
 
 server:
   port: 4330
@@ -28,7 +28,7 @@ spring:
         max-wait: 100000
         max-idle: 10
         max-active: 100
-    password: 137248Csq
+#    password: 137248Csq
   cloud:
     nacos:
       discovery:

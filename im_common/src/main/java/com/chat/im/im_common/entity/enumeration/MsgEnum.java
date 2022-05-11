@@ -1,7 +1,13 @@
 package com.chat.im.im_common.entity.enumeration;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import lombok.Getter;
 
+/**
+ * 消息类型
+ * @author: chovychan in 2022/5/11
+ */
+@Getter
 public enum MsgEnum {
 
     CONNECT("连接", "第一次(或重连)初始化连接"),

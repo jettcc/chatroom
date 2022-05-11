@@ -4,7 +4,9 @@ import com.chat.im.im_chatserver.vo.message.GetUnreadMessageVO;
 import com.chat.im.im_common.entity.entity.Message;
 
 import java.util.List;
-
+/**
+ * @author: chovychan in 2022/5/11
+ */
 public interface MessageService {
     /**
      * 保存消息
@@ -18,7 +20,7 @@ public interface MessageService {
      */
     void readMsg(List<Long> ids);
 
-    List<String> pushGroupMsg(Long groupId);
+    // List<String> pushGroupMsg(Long groupId);
 
     List<GetUnreadMessageVO> getUnreadMsg(String uid);
 }
