@@ -1,19 +1,21 @@
 package com.chat.im.im_chatserver.event.handler;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chat.im.im_chatserver.component.LogMapper;
 import com.chat.im.im_chatserver.component.RedisMapper;
 import com.chat.im.im_chatserver.config.chat.ChatHandler;
 import com.chat.im.im_chatserver.config.chat.UserChannelRel;
 import com.chat.im.im_chatserver.event.MessageEvent;
-import com.chat.im.im_chatserver.service.GroupService;
-import com.chat.im.im_chatserver.service.MessageService;
 import com.chat.im.im_chatserver.utils.CommonUtils;
 import com.chat.im.im_chatserver.utils.JsonUtils;
 import com.chat.im.im_common.entity.dto.UserGroup;
 import com.chat.im.im_common.entity.entity.Group;
 import com.chat.im.im_common.entity.entity.Message;
 import com.chat.im.im_common.mapper.GroupMapper;
+import com.chat.im.im_common.mapper.MessageMapper;
 import com.chat.im.im_common.mapper.UserGroupMapper;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
@@ -33,16 +35,14 @@ import java.util.Optional;
 public class MessageEventHandler implements MessageEvent {
     private static final String TAG = "MessageEventHandler";
     private final RedisMapper redisMapper;
-    private final MessageService messageService;
-    private final GroupService groupService;
+    private final MessageMapper messageMapper;
     private final UserGroupMapper userGroupMapper;
     private final GroupMapper groupMapper;
     private final ChannelGroup channels = ChatHandler.channels;
 
-    public MessageEventHandler(RedisMapper redisMapper, MessageService messageService, GroupService groupService, UserGroupMapper userGroupMapper, GroupMapper groupMapper) {
+    public MessageEventHandler(RedisMapper redisMapper, MessageMapper messageMapper, UserGroupMapper userGroupMapper, GroupMapper groupMapper) {
         this.redisMapper = redisMapper;
-        this.messageService = messageService;
-        this.groupService = groupService;
+        this.messageMapper = messageMapper;
         this.userGroupMapper = userGroupMapper;
         this.groupMapper = groupMapper;
     }
@@ -51,6 +51,7 @@ public class MessageEventHandler implements MessageEvent {
     public void event(Message message, Channel channel) {
         var msgType = message.getMsgType();
         if (!check(message)) throw LogMapper.error(TAG, "禁言中不能发言");
+        MessageInterface messageService = new MessageInterfaceImpl();
         switch (msgType) {
             // 链接
             case CONNECT -> {
@@ -139,6 +140,31 @@ public class MessageEventHandler implements MessageEvent {
                 toUserChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(message)));
             }
         }
+    }
 
+    interface MessageInterface extends IService<Message> {
+        Message saveMsg(Message message);
+        void readMsg(List<Long> ids);
+    }
+
+    @Service
+    class MessageInterfaceImpl extends ServiceImpl<MessageMapper, Message> implements MessageInterface {
+        {
+            //初始化
+            baseMapper = messageMapper;
+        }
+
+        @Override
+        public Message saveMsg(Message message) {
+            this.save(message);
+            return message;
+        }
+        @Override
+        public void readMsg(List<Long> ids) {
+            Message message = new Message().setHaveRead(true);
+            UpdateWrapper<Message> qw = new UpdateWrapper<>();
+            qw.in("id", ids);
+            this.update(message, qw);
+        }
     }
 }

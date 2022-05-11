@@ -8,10 +8,17 @@ services:
       args:
         GATEWAY_JAR: gateway.jar
     tty: true
+    hostname: im-gateway-server
     links:
       - im-oauth2-server
       - im-file-server
-      - im-chat-sever
+      - im-chat-server
+      - im-service-provider
+    depends_on:
+      - im-oauth2-server
+      - im-file-server
+      - im-chat-server
+      - im-service-provider
     volumes:
       - ./im_gateway/log:/log
     ports:
@@ -28,6 +35,7 @@ services:
     networks:
       - server
     tty: true
+    hostname: im-oauth2-server
     volumes:
       - ./im_oauth2server/log:/log
     ports:
@@ -42,22 +50,35 @@ services:
     networks:
       - server
     tty: true
+    hostname: im-file-server
     ports:
       - "4335:4335"
-  im-chat-sever:
+  im-chat-server:
     image: im-chat-server
     build:
       context: build/chat
       dockerfile: Dockerfile
-      args:
-        CHAT_JAR: chatServer.jar
     networks:
       - server
     tty: true
+    hostname: im-chat-server
     ports:
-      - "4302:4302"
-      - "4330:4330"
+      - "4330:4302"
+  im-service-provider:
+    image: im-service-provider
+    build:
+      context: build/provider
+      dockerfile: Dockerfile
+      args:
+        SERVICE_JAR: service-provider.jar
+    networks:
+      - server
+    tty: true
+    hostname: im-service-provider
+    ports:
+      - "4337:4337"
 
 networks:
   server:
+    external: true
     driver: bridge

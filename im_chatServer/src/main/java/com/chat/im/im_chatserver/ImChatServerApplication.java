@@ -6,8 +6,12 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -20,8 +24,11 @@ public class ImChatServerApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(ImChatServerApplication.class, args);
-        WebSocketServer.run();
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(ImChatServerApplication.class, args);
+        ExecutorService service = Executors.newCachedThreadPool();
+        WebSocketServer webSocketServer = applicationContext.getBean(WebSocketServer.class);
+        service.execute(webSocketServer);
+        service.shutdown();
     }
 
 }

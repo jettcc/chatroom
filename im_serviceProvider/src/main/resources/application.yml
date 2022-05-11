@@ -1,0 +1,60 @@
+aliyundbhost: rm-wz9i5gw9n7zm8mj4hro.mysql.rds.aliyuncs.com
+aliyundbport: 3306
+aliyundbusername: im_chat
+aliyundbpassword: XuVe1kZCvAGgM5VpZ2+RtjYlnv1GQyo3WGsB737shprmrkNfUL5bjD1ol94odgmvQjjzEEaLqqldWMmJRuULWg==
+public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIC63m5n7W98ZCLl3a/92Sia3JXqdr5QAcI3VloRg780u3V3sBU4sXW0gsWqYWha2rzlxV4tprZRpMtbuFYGpoECAwEAAQ==
+nacos-host: 1.12.233.249
+redis-host: 1.12.233.249
+
+server:
+  port: 4337
+
+# 应用名称
+spring:
+  application:
+    name: im-service-provider
+  redis:
+    host: ${redis-host}
+    database: 2
+    timeout: 1800000
+    lettuce:
+      pool:
+        max-wait: 100000
+        max-idle: 10
+        max-active: 100
+  #    password: 137248Csq
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${nacos-host}:8848
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # mysql属性配置
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      connection-properties: "config.decrypt=true;config.decrypt.key=${public-key}"
+      # serverTimezone= Asia/Shanghai 或者 GMT%2B8
+      url: jdbc:mysql://${aliyundbhost}:${aliyundbport}/im_chat?useSSL=false&useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&allowPublicKeyRetrieval=true
+      username: ${aliyundbusername}
+      password: ${aliyundbpassword}
+      # 使用加密过滤
+      filter:
+        config:
+          enabled: true
+      # 初始连接数
+      initial-size: 10
+      # 最大连接数
+      max-active: 50
+      filters: stat,wall,slf4j,config
+
+mybatis-plus:
+  type-aliases-package: com.chat.im.im_common
+
+logging:
+  config: log4j2-spring.xml
+
+
+
+
+
+

@@ -26,6 +26,7 @@
         <module>im_fileServer</module>
         <module>im_chatServer</module>
         <module>im_gateway</module>
+        <module>im_serviceProvider</module>
     </modules>
 
     <dependencies>

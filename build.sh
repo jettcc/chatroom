@@ -1,8 +1,8 @@
 mvn -B clean install package -Dmaven.test.skip=true -Dautoconfig.skip
 mkdir -p build
-mkdir -p build/oauth build/gateway build/file build/chat
+mkdir -p build/oauth build/gateway build/file build/chat build/provider
 
-echo build/oauth build/gateway build/file build/chat | xargs -n 1 cp -v log4j2-spring.xml
+echo build/oauth build/gateway build/file build/chat build/provider | xargs -n 1 cp -v log4j2-spring.xml
 
 mv im_oauth2server/target/im_oauth2server-0.0.1-SNAPSHOT.jar build/oauth/oauth-server.jar
 cp im_oauth2server/Dockerfile build/oauth/Dockerfile
@@ -16,3 +16,6 @@ cp im_fileServer/Dockerfile build/file/Dockerfile
 
 mv im_chatServer/target/im_chatServer-0.0.1-SNAPSHOT.jar build/chat/chat-server.jar
 cp im_chatServer/Dockerfile build/chat/Dockerfile
+
+mv im_serviceProvider/target/im_serviceProvider-0.0.1-SNAPSHOT.jar build/provider/service-provider.jar
+cp im_serviceProvider/Dockerfile build/provider/Dockerfile

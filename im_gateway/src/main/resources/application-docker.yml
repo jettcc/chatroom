@@ -36,6 +36,9 @@ spring:
           predicates:
             - Path=/ws
             - Header=Connection,Upgrade
+      httpclient:
+        websocket:
+          max-frame-payload-length: 5242880
   #          filters:
   #            - PreserveHostHeader
   #          filters:
@@ -52,6 +55,7 @@ logging:
 secure:
   ignore:
     urls: #配置白名单路径
+      - "/ws/**"
       - "/actuator/**"
       - "/auth/oauth/token"
       - "/auth/account/login"

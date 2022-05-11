@@ -27,15 +27,12 @@ spring:
           uri: lb://im-fileServer
           predicates:
             - Path=/file/**
-        - id: chat
-          uri: lb://im-chat-server
-          predicates:
-            - Path=/chat/**
         - id: websocket
           uri: ws://localhost:4302/ws
           predicates:
             - Path=/ws
             - Header=Connection,Upgrade
+
   #          filters:
   #            - PreserveHostHeader
   #          filters:
