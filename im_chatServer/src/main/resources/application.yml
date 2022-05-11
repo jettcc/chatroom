@@ -28,7 +28,7 @@ spring:
         max-wait: 100000
         max-idle: 10
         max-active: 100
-#    password: 137248Csq
+    password: 137248Csq
   cloud:
     nacos:
       discovery:

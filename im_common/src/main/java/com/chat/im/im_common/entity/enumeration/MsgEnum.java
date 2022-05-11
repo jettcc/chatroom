@@ -4,10 +4,11 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 
 public enum MsgEnum {
 
-    CONNECT("链接消息", "第一次(或重连)初始化连接"),
-    CHAT("聊天消息", "聊天消息"),
-    SIGNED("读取消息", "消息签收"),
-    KEEPALIVE("心跳消息", "客户端保持心跳"),
+    CONNECT("连接", "第一次(或重连)初始化连接"),
+    CHAT("聊天", "聊天消息"),
+    SIGNED("读取", "消息签收"),
+    KEEPALIVE("心跳", "客户端保持心跳"),
+    UNREAD("获得未读消息", "获得未读消息"),
     PULL_FRIEND("操作消息", "拉取好友");
 
     @EnumValue

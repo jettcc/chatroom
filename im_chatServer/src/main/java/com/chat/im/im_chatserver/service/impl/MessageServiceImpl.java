@@ -1,6 +1,5 @@
 package com.chat.im.im_chatserver.service.impl;
 
-import com.alibaba.nacos.client.utils.LogUtils;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -47,8 +46,10 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<GetUnreadMessageVO> getUnreadMsg(String uid) {
-        List<Object> unreadMessages = redisMapper.lGet(CommonUtils.encodeStr(uid), 0, -1);
+        String key = CommonUtils.encodeStr(uid);
+        List<Object> unreadMessages = redisMapper.lGet(key, 0, -1);
         if (unreadMessages == null) throw LogMapper.error(TAG, "没有未读消息");
+        redisMapper.del(key);
         return unreadMessages.stream()
                 .map(obj -> (Message) obj).map(GetUnreadMessageVO::new).toList();
     }

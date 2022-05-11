@@ -1,27 +1,21 @@
 package com.chat.im.im_chatserver.config.chat;
 
 import com.chat.im.im_chatserver.component.LogMapper;
-import com.chat.im.im_chatserver.component.RedisMapper;
-import com.chat.im.im_chatserver.service.MessageService;
-import com.chat.im.im_chatserver.service.impl.MessageServiceImpl;
-import com.chat.im.im_chatserver.utils.CommonUtils;
+import com.chat.im.im_chatserver.event.MessageEvent;
+import com.chat.im.im_chatserver.event.handler.MessageEventHandler;
 import com.chat.im.im_chatserver.utils.JsonUtils;
 import com.chat.im.im_chatserver.utils.SpringUtil;
 import com.chat.im.im_common.entity.entity.Message;
 import com.chat.im.im_common.entity.enumeration.MsgEnum;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelId;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -35,8 +29,6 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     private static final String TAG = "ChatHandler";
     // 用于记录和管理所有客户端的channel
     private static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-    private volatile RedisMapper redisMapper;
-    private volatile MessageService messageService;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
@@ -50,48 +42,10 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         log.info("接受到的数据: {}, message: {}", content, message);
         MsgEnum msgType = message.getMsgType();
         if (Objects.isNull(msgType)) throw LogMapper.error(TAG, "错误, 消息类型不能为空");
-        // 初始化数据库资源
-        initDataBaseMapper();
-        switch (msgType) {
-            // 链接
-            case CONNECT -> {
-                // 当websocket 第一次open的时候，初始化channel，把用的channel和发送方id关联起来
-                UserChannelRel.put(message.getFromId(), currentChannel);
-                // 测试
-                channels.stream().map(Channel::id).map(ChannelId::asLongText).forEach(s -> {
-                    log.debug("debug id:{}", s);
-                });
-                UserChannelRel.output();
-            }
-            case CHAT -> {
-                String toId = message.getToId();
-                // 保存消息到数据库，并且标记为未签收
-                Message saveMsg = messageService.saveMsg(message);
-                // 发送消息
-                // 从全局用户Channel关系中获取接受方的channel
-                Channel receiverChannel = UserChannelRel.get(toId);
-                if (receiverChannel == null || channels.find(receiverChannel.id()) == null) {
-                    // todo 离线用户, 将消息缓存到离线库中, 这里用redis存
-                    // 有两种策略, 要么就是在连接的时候读取, 要么就是用读取事件
-                    initRedis();
-                    redisMapper.lrpush(CommonUtils.encodeStr(toId), message);
-                } else {
-                    // 用户在线, 此时根据websocket, 用户一定能收到消息
-                    receiverChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(saveMsg)));
-                }
-            }
-            case SIGNED -> { // 将消息标记为已读
-                // 这里规定好, 当事件为SIGNED, msgContext就是msg的id, 用 "," 分隔
-                List<Long> msgIds = Arrays.stream(message.getMsgContext().split(","))
-                        .map(Long::valueOf).toList();
-                messageService.readMsg(msgIds);
-            }
-            case KEEPALIVE -> {
-                LogMapper.info(TAG, "收到[" + currentChannel + "]的心跳请求...");
-            }
-        }
+        MessageEvent messageEvent = SpringUtil.getBean(MessageEventHandler.class);
+        // 事件处理
+        messageEvent.event(message, currentChannel);
 
-        System.out.println(message);
         // 获取客户端传输过来的消息
 //        String content = msg.text();
 
@@ -103,13 +57,13 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
      * 获取客户端的channel，并且放到ChannelGroup中去进行管理
      */
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+    public void handlerAdded(ChannelHandlerContext ctx) {
         log.info("一个客户端链接...");
         channels.add(ctx.channel());
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+    public void handlerRemoved(ChannelHandlerContext ctx) {
         // 当触发handlerRemoved，ChannelGroup会自动移除对应客户端的channel
         channels.remove(ctx.channel());
         log.info("客户端断开，channel对应的长id为：{}, 短id为: {}",
@@ -118,30 +72,14 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
         // 发生异常之后关闭连接（关闭channel），随后从ChannelGroup中移除
         log.error("客户端异常, error msg: {}", e.getMessage());
         ctx.channel().close();
         channels.remove(ctx.channel());
     }
 
-    private void initDataBaseMapper() {
-        if (messageService == null) {
-            synchronized (this) {
-                if (messageService == null) {
-                    messageService = SpringUtil.getBean(MessageServiceImpl.class);
-                }
-            }
-        }
-    }
-
-    private void initRedis() {
-        if (redisMapper == null) {
-            synchronized (this) {
-                if (redisMapper == null) {
-                    redisMapper = SpringUtil.getBean(RedisMapper.class);
-                }
-            }
-        }
+    public ChannelGroup getChannels() {
+        return channels;
     }
 }

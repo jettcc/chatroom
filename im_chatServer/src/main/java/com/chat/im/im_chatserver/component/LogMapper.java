@@ -14,7 +14,7 @@ import java.util.function.BiConsumer;
 public class LogMapper {
 
     public static void info(String TAG, String msg) {
-        info(TAG, null, msg);
+        info(TAG, "", msg);
     }
 
     public static void info(String TAG, String funcName, String msg) {
@@ -22,7 +22,7 @@ public class LogMapper {
     }
 
     public static RuntimeException error(String TAG, String msg) {
-        error(TAG, null, msg);
+        error(TAG, "", msg);
         return new RuntimeException(msg);
     }
 
