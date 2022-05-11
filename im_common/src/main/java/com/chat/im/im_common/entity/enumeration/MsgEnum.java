@@ -9,6 +9,7 @@ public enum MsgEnum {
     SIGNED("读取", "消息签收"),
     KEEPALIVE("心跳", "客户端保持心跳"),
     UNREAD("获得未读消息", "获得未读消息"),
+    GROUP("群组消息", "群聊消息"),
     PULL_FRIEND("操作消息", "拉取好友");
 
     @EnumValue

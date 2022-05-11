@@ -17,6 +17,9 @@ import java.util.Optional;
 @Getter
 @Setter
 public class UserInfoVO {
+    @ApiModelProperty("id")
+    private String id;
+
     @ApiModelProperty("姓名")
     private String name;
 

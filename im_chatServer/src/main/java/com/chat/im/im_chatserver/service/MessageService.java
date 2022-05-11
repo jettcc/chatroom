@@ -18,5 +18,7 @@ public interface MessageService {
      */
     void readMsg(List<Long> ids);
 
+    List<String> pushGroupMsg(Long groupId);
+
     List<GetUnreadMessageVO> getUnreadMsg(String uid);
 }

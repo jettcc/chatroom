@@ -34,7 +34,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
         String content = msg.text();
         Channel currentChannel = ctx.channel();
-        // 1. 获取客户端发来的消息
+        // 获取客户端发来的消息
         Message message = Optional.ofNullable(JsonUtils.jsonToPojo(content, Message.class))
                 .orElseThrow(() -> {
                     throw LogMapper.error(TAG, "jsonToPojo 映射错误, 请检查");
@@ -45,10 +45,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         MessageEvent messageEvent = SpringUtil.getBean(MessageEventHandler.class);
         // 事件处理
         messageEvent.event(message, currentChannel);
-
-        // 获取客户端传输过来的消息
-//        String content = msg.text();
-
+        // 回应
         channels.writeAndFlush(new TextWebSocketFrame("[服务器在]" + LocalDateTime.now() + "接受到消息, 消息为：" + content));
     }
 
