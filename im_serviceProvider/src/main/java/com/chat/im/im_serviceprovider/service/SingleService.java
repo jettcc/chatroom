@@ -1,10 +1,12 @@
 package com.chat.im.im_serviceprovider.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.chat.im.im_serviceprovider.dto.single.CreateGroupDTO;
 import com.chat.im.im_serviceprovider.dto.single.SelectGroupDTO;
 import com.chat.im.im_serviceprovider.dto.single.SelectUserDTO;
 import com.chat.im.im_serviceprovider.vo.account.UserInfoVO;
 import com.chat.im.im_serviceprovider.vo.message.GetMessageVO;
+import com.chat.im.im_serviceprovider.vo.single.GetGroupVO;
 import com.chat.im.im_serviceprovider.vo.single.SelectGroupVO;
 
 import java.util.List;
@@ -46,7 +48,14 @@ public interface SingleService {
      */
     void remove(Long msgId);
 
+    /**
+     * 查询指定群聊
+     *
+     * @param dto 查询条件
+     * @return 群聊
+     */
     SelectGroupVO selectGroup(SelectGroupDTO dto);
+
     /**
      * 加入指定群聊
      *
@@ -54,4 +63,24 @@ public interface SingleService {
      * @param groupId 群聊id
      */
     void join(String uid, Long groupId);
+
+    /**
+     * 查询个人加入的所有群聊
+     *
+     * @param uid 用户id
+     * @return
+     */
+    List<GetGroupVO> getGroup(String uid);
+
+    /**
+     * 创建群聊
+     * @param dto 创建群聊信息
+     */
+    void createGroup(String uid, CreateGroupDTO dto);
+
+    /**
+     * 删除群聊
+     * @param id 群聊id
+     */
+    void delGroup(Long id);
 }

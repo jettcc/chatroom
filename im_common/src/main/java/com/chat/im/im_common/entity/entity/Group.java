@@ -24,6 +24,9 @@ public class Group extends BaseAutoEntity {
     @TableField(value = "`name`")
     private String name;
 
+    @ApiModelProperty("描述")
+    private String context;
+
     @ApiModelProperty("群主id")
     private String masterId;
 
