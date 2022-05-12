@@ -6,25 +6,31 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chat.im.im_chatserver.component.LogMapper;
 import com.chat.im.im_chatserver.component.RedisMapper;
+import com.chat.im.im_chatserver.component.SourceMapper;
 import com.chat.im.im_chatserver.config.chat.ChatHandler;
 import com.chat.im.im_chatserver.config.chat.UserChannelRel;
 import com.chat.im.im_chatserver.event.MessageEvent;
 import com.chat.im.im_chatserver.utils.CommonUtils;
 import com.chat.im.im_chatserver.utils.JsonUtils;
 import com.chat.im.im_common.entity.dto.UserGroup;
+import com.chat.im.im_common.entity.entity.BaseUser;
 import com.chat.im.im_common.entity.entity.Group;
 import com.chat.im.im_common.entity.entity.Message;
+import com.chat.im.im_common.entity.enumeration.MsgEnum;
+import com.chat.im.im_common.entity.enumeration.Role;
 import com.chat.im.im_common.mapper.GroupMapper;
 import com.chat.im.im_common.mapper.MessageMapper;
 import com.chat.im.im_common.mapper.UserGroupMapper;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 事件处理
@@ -38,13 +44,26 @@ public class MessageEventHandler implements MessageEvent {
     private final MessageMapper messageMapper;
     private final UserGroupMapper userGroupMapper;
     private final GroupMapper groupMapper;
+    private final SourceMapper sourceMapper;
     private final ChannelGroup channels = ChatHandler.channels;
 
-    public MessageEventHandler(RedisMapper redisMapper, MessageMapper messageMapper, UserGroupMapper userGroupMapper, GroupMapper groupMapper) {
+    public MessageEventHandler(RedisMapper redisMapper, MessageMapper messageMapper, UserGroupMapper userGroupMapper, GroupMapper groupMapper, SourceMapper sourceMapper) {
         this.redisMapper = redisMapper;
         this.messageMapper = messageMapper;
         this.userGroupMapper = userGroupMapper;
         this.groupMapper = groupMapper;
+        this.sourceMapper = sourceMapper;
+    }
+
+    @Getter
+    enum InviteType {
+        FRIEND("邀请你成为好友"),
+        GROUP("邀请你加入群聊");
+        final String name;
+
+        InviteType(String name) {
+            this.name = name;
+        }
     }
 
     @Override
@@ -73,9 +92,7 @@ public class MessageEventHandler implements MessageEvent {
                         .map(Long::valueOf).toList();
                 messageService.readMsg(msgIds);
             }
-            case KEEPALIVE -> {
-                LogMapper.info(TAG, "收到[" + channel + "]的心跳请求...");
-            }
+            case KEEPALIVE -> LogMapper.info(TAG, "收到[" + channel + "]的心跳请求...");
             case UNREAD -> {
                 String key = CommonUtils.encodeStr(message.getFromId());
                 List<Object> unreadMessages = redisMapper.lGet(key, 0, -1);
@@ -95,6 +112,37 @@ public class MessageEventHandler implements MessageEvent {
                 for (String toId : ids) {
                     pushMsg(toId, saveMsg);
                 }
+            }
+            case JOIN_GROUP -> {
+                // 加入群聊的逻辑是通知管理员审核, 审核通过就加入, 此时应该有个事件
+                String uid = message.getFromId(); //
+                String gid = message.getToId(); // 群组id
+                // 找到群的管理员或者群主, 这里为了方便先找管理员
+                QueryWrapper<UserGroup> qw = new QueryWrapper<>();
+                List<String> userGroups =
+                        userGroupMapper.selectList(qw.eq("group_id", gid)
+                                        .eq("role", Role.ADMIN.getName())).stream()
+                                .map(UserGroup::getUserId).collect(Collectors.toList());
+                // 找到管理员了之后向他们推送消息, 在线的管理员直接推送, 不在线的管理员存离线消息
+                Message joinMsg = new Message()
+                        .setMsgType(MsgEnum.NOTICE)
+                        .setFromId(uid)
+                        .setMsgContext("申请加入群聊")
+                        .setToId(gid);
+                for (String id : userGroups) {
+                    pushMsg(id, joinMsg);
+                }
+            }
+            case INVITE -> {
+                // 邀请事件比较简单, push过去就行了, 区分好友和群组邀请
+                String formId = message.getFromId();
+                String toId = message.getToId();
+                InviteType type = InviteType.valueOf(message.getMsgContext());
+                BaseUser u = findUser(formId);
+                Message notice = new Message().setFromId(formId).setToId(toId)
+                        .setMsgType(MsgEnum.NOTICE)
+                        .setMsgContext("[" + u.getNickName() + "] " + type.getName());
+                pushMsg(toId, notice);
             }
         }
     }
@@ -122,7 +170,7 @@ public class MessageEventHandler implements MessageEvent {
 
     private void pushMsg(String toId, Message message) {
         switch (message.getMsgType()) {
-            case CHAT -> {
+            case CHAT, NOTICE -> {
                 Channel toUserChannel = UserChannelRel.get(toId);
                 if (toUserChannel == null || channels.find(toUserChannel.id()) == null) {
                     // todo 离线用户, 将消息缓存到离线库中, 这里用redis存
@@ -142,8 +190,13 @@ public class MessageEventHandler implements MessageEvent {
         }
     }
 
+    private BaseUser findUser(String uid) {
+        return sourceMapper.findUser(TAG, "", uid);
+    }
+
     interface MessageInterface extends IService<Message> {
         Message saveMsg(Message message);
+
         void readMsg(List<Long> ids);
     }
 
@@ -159,6 +212,7 @@ public class MessageEventHandler implements MessageEvent {
             this.save(message);
             return message;
         }
+
         @Override
         public void readMsg(List<Long> ids) {
             Message message = new Message().setHaveRead(true);
