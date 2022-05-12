@@ -21,10 +21,28 @@ public interface GroupService {
 
     /**
      * 查询指定群聊的聊天记录
+     *
      * @param page 分页
      * @param size 大小
-     * @param id 群聊id
+     * @param id   群聊id
      * @return 聊天记录
      */
     IPage<GroupMessageVO> getGroupMsg(Long page, Long size, Long id);
+
+    /**
+     * 退出群聊
+     *
+     * @param uid 用户id
+     * @param id  群聊id
+     */
+    void quitGroup(String uid, Long id);
+
+    /**
+     * 踢出、静音指定用户
+     *
+     * @param type 操作类型
+     * @param gid  群组id
+     * @param id   用户id
+     */
+    void outMember(String type, Long gid, String id);
 }

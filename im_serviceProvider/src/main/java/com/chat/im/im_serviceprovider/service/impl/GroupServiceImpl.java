@@ -32,6 +32,11 @@ public class GroupServiceImpl implements GroupService {
         this.messageMapper = messageMapper;
     }
 
+    private enum Ops {
+        MUTE,
+        OUT;
+    }
+
     @Override
     public IPage<UserInfoVO> groupMember(Long page, Long size, Long groupId) {
         QueryWrapper<UserGroup> qw = new QueryWrapper<>();
@@ -51,5 +56,25 @@ public class GroupServiceImpl implements GroupService {
         return new Page<GroupMessageVO>()
                 .setRecords(messageMapper.selectList(qw)
                         .stream().map(GroupMessageVO::new).toList());
+    }
+
+    @Override
+    public void quitGroup(String uid, Long id) {
+        QueryWrapper<UserGroup> qw = new QueryWrapper<>();
+        qw.eq("user_id", uid);
+        qw.eq("group_id", id);
+        userGroupMapper.delete(qw);
+    }
+
+    @Override
+    public void outMember(String type, Long gid, String id) {
+        Ops ops = Ops.valueOf(type);
+        QueryWrapper<UserGroup> qw = new QueryWrapper<>();
+        qw.eq("group_id", gid);
+        qw.eq("user_id", id);
+        switch (ops) {
+            case MUTE -> userGroupMapper.update(new UserGroup().setMute(true), qw);
+            case OUT -> userGroupMapper.delete(qw);
+        }
     }
 }
