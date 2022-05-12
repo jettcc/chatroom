@@ -34,6 +34,12 @@ public interface SingleService {
     List<UserInfoVO> selectUser(SelectUserDTO dto);
 
     /**
+     * 添加好友
+     * @param uid 用户id
+     * @param tarId 目标id
+     */
+    void friend(String uid, String tarId);
+    /**
      * 屏蔽指定用户
      *
      * @param uid   用户id

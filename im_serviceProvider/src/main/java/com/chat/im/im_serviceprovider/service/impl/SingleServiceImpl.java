@@ -68,6 +68,16 @@ public class SingleServiceImpl implements SingleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void friend(String uid, String tarId) {
+        UserUser u = new UserUser(), f = new UserUser();
+        f.setFriendId(uid).setUserId(tarId).setMute(false);
+        u.setUserId(uid).setFriendId(tarId).setMute(false);
+        userUserMapper.insert(u);
+        userUserMapper.insert(f);
+    }
+
+    @Override
     public void shield(String uid, String tarId) {
         UpdateWrapper<UserUser> uw = new UpdateWrapper<>();
         uw.eq("user_id", uid);

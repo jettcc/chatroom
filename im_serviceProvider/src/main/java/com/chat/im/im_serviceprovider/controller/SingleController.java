@@ -47,6 +47,13 @@ public class SingleController {
         return SystemMsgJsonResponse.success(singleService.selectUser(dto));
     }
 
+    @PostMapping("/friend")
+    @ApiOperation(value = "[个人模块] - 添加好友", httpMethod = "POST")
+    public SystemMsgJsonResponse friend(@RequestParam("id") @NotNull(message = "目标用户id不能为空") String id) {
+
+        return SystemMsgJsonResponse.success();
+    }
+
     @PostMapping("/shield")
     @ApiOperation(value = "[个人模块] - 屏蔽指定的用户", httpMethod = "POST")
     public SystemMsgJsonResponse shield(@RequestParam("uid") String uid) {
