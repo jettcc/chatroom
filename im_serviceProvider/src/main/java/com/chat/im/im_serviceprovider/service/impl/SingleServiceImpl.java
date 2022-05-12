@@ -52,7 +52,7 @@ public class SingleServiceImpl implements SingleService {
         QueryWrapper<Message> qw = new QueryWrapper<>();
         qw.eq("from_id", uid);
         qw.eq("to_id", tarId);
-        qw.eq("msg_type", MsgEnum.CHAT);
+        qw.eq("msg_type", MsgEnum.CHAT.getType());
         return new Page<GetMessageVO>(page, size)
                 .setRecords(messageMapper.selectPage(new Page<>(page, size), qw)
                         .getRecords().stream().map(GetMessageVO::new).toList());
@@ -126,6 +126,7 @@ public class SingleServiceImpl implements SingleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delGroup(Long id) {
         groupMapper.deleteById(id);
         QueryWrapper<UserGroup> qw = new QueryWrapper<>();

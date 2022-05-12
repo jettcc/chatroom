@@ -90,7 +90,7 @@ public class SingleController {
     @PostMapping("/del-group")
     @ApiOperation(value = "[个人模块] - 删除群聊", httpMethod = "POST")
     public SystemMsgJsonResponse delGroup(@RequestParam("id") Long id) {
-
+        singleService.delGroup(id);
         return SystemMsgJsonResponse.success();
     }
 }

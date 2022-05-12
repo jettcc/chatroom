@@ -1,8 +1,8 @@
 package com.chat.im.im_serviceprovider.vo.message;
 
 import com.chat.im.im_common.entity.entity.Message;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @ApiModel("消息实体")
 @Getter
 @Setter
-public class GetMessageVO {
+public class GroupMessageVO {
     @ApiModelProperty("id")
     private Long id;
 
@@ -23,7 +23,7 @@ public class GetMessageVO {
     private String fromId;
 
     @ApiModelProperty("接收方")
-    private String toId;
+    private Long toId;
 
     @ApiModelProperty("发送时间")
     private String createTime;
@@ -31,13 +31,11 @@ public class GetMessageVO {
     @ApiModelProperty("内容")
     private String msgContext;
 
-//    @ApiModelProperty("签收状态")
-//    private Boolean haveRead;
-
-    public GetMessageVO(Message message) {
+    public GroupMessageVO(Message message) {
         Optional.ofNullable(message).ifPresent(m -> {
             BeanUtils.copyProperties(m, this);
             this.createTime = m.getCreateTime().toString();
+            this.toId = Long.valueOf(m.getToId());
         });
     }
 }
