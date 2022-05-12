@@ -44,5 +44,5 @@ public interface GroupService {
      * @param gid  群组id
      * @param id   用户id
      */
-    void outMember(String type, Long gid, String id);
+    void outMember(String type,String uid, Long gid, String id);
 }

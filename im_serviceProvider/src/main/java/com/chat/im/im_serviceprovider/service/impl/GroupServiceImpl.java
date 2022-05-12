@@ -4,32 +4,36 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chat.im.im_common.entity.dto.UserGroup;
+import com.chat.im.im_common.entity.entity.BaseUser;
 import com.chat.im.im_common.entity.entity.Message;
 import com.chat.im.im_common.entity.enumeration.MsgEnum;
+import com.chat.im.im_common.entity.enumeration.Role;
 import com.chat.im.im_common.mapper.BaseUserMapper;
 import com.chat.im.im_common.mapper.MessageMapper;
 import com.chat.im.im_common.mapper.UserGroupMapper;
+import com.chat.im.im_serviceprovider.component.LogMapper;
+import com.chat.im.im_serviceprovider.component.SourceMapper;
 import com.chat.im.im_serviceprovider.service.GroupService;
 import com.chat.im.im_serviceprovider.vo.account.UserInfoVO;
 import com.chat.im.im_serviceprovider.vo.message.GroupMessageVO;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author: chovychan in 2022/5/11
  */
 @Service
 public class GroupServiceImpl implements GroupService {
+    private static final String TAG = "GroupServiceImpl";
     private final UserGroupMapper userGroupMapper;
     private final BaseUserMapper baseUserMapper;
     private final MessageMapper messageMapper;
+    private final SourceMapper sourceMapper;
 
-    public GroupServiceImpl(UserGroupMapper userGroupMapper, BaseUserMapper baseUserMapper, MessageMapper messageMapper) {
+    public GroupServiceImpl(UserGroupMapper userGroupMapper, BaseUserMapper baseUserMapper, MessageMapper messageMapper, SourceMapper sourceMapper) {
         this.userGroupMapper = userGroupMapper;
         this.baseUserMapper = baseUserMapper;
         this.messageMapper = messageMapper;
+        this.sourceMapper = sourceMapper;
     }
 
     private enum Ops {
@@ -67,7 +71,9 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void outMember(String type, Long gid, String id) {
+    public void outMember(String type, String uid, Long gid, String id) {
+        UserGroup userGroup = userGroupMapper.selectOne(new QueryWrapper<UserGroup>().eq("user_id", uid).eq("group_id", gid));
+        if (userGroup.getRole().equals(Role.NORMAL)) throw LogMapper.error(TAG, "只有群管理或者群主才能操作");
         Ops ops = Ops.valueOf(type);
         QueryWrapper<UserGroup> qw = new QueryWrapper<>();
         qw.eq("group_id", gid);

@@ -20,6 +20,7 @@ public enum MsgEnum {
     JOIN_GROUP("加入群聊", "加入群聊"),
     NOTICE("通知", "通知: 加好友或者是进群审核, 这里的通知应该是server来发"),
     INVITE("邀请", "邀请加入群聊或者邀请成为好友"),
+    AUDIT("审核", "审核加好友或者审核入群"),
     PULL_FRIEND("操作消息", "拉取好友");
 
     @EnumValue

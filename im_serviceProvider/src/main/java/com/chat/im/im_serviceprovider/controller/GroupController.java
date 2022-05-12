@@ -55,7 +55,8 @@ public class GroupController {
     public SystemMsgJsonResponse outMember(@RequestParam("id") @NotNull(message = "用户id不能为空") String id,
                                            @RequestParam("gid") @NotNull(message = "群组id不能为空") Long gid,
                                            @RequestParam("type") @NotNull(message = "操作类型") String type) {
-        groupService.outMember(type, gid, id);
+
+        groupService.outMember(type, auth.getId(), gid, id);
         return SystemMsgJsonResponse.success();
     }
 

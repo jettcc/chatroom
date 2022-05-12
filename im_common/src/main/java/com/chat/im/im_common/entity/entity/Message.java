@@ -40,5 +40,8 @@ public class Message extends BaseAutoEntity {
 
     @ApiModelProperty("消息类型")
     private MsgEnum msgType;
+
+    @ApiModelProperty("拓展字段")
+    private String expand;
 }
     

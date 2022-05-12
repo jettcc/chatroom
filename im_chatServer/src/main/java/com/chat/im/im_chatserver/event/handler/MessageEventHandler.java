@@ -13,6 +13,7 @@ import com.chat.im.im_chatserver.event.MessageEvent;
 import com.chat.im.im_chatserver.utils.CommonUtils;
 import com.chat.im.im_chatserver.utils.JsonUtils;
 import com.chat.im.im_common.entity.dto.UserGroup;
+import com.chat.im.im_common.entity.dto.UserUser;
 import com.chat.im.im_common.entity.entity.BaseUser;
 import com.chat.im.im_common.entity.entity.Group;
 import com.chat.im.im_common.entity.entity.Message;
@@ -21,6 +22,7 @@ import com.chat.im.im_common.entity.enumeration.Role;
 import com.chat.im.im_common.mapper.GroupMapper;
 import com.chat.im.im_common.mapper.MessageMapper;
 import com.chat.im.im_common.mapper.UserGroupMapper;
+import com.chat.im.im_common.mapper.UserUserMapper;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -42,14 +44,16 @@ public class MessageEventHandler implements MessageEvent {
     private static final String TAG = "MessageEventHandler";
     private final RedisMapper redisMapper;
     private final MessageMapper messageMapper;
+    private final UserUserMapper userUserMapper;
     private final UserGroupMapper userGroupMapper;
     private final GroupMapper groupMapper;
     private final SourceMapper sourceMapper;
     private final ChannelGroup channels = ChatHandler.channels;
 
-    public MessageEventHandler(RedisMapper redisMapper, MessageMapper messageMapper, UserGroupMapper userGroupMapper, GroupMapper groupMapper, SourceMapper sourceMapper) {
+    public MessageEventHandler(RedisMapper redisMapper, MessageMapper messageMapper, UserUserMapper userUserMapper, UserGroupMapper userGroupMapper, GroupMapper groupMapper, SourceMapper sourceMapper) {
         this.redisMapper = redisMapper;
         this.messageMapper = messageMapper;
+        this.userUserMapper = userUserMapper;
         this.userGroupMapper = userGroupMapper;
         this.groupMapper = groupMapper;
         this.sourceMapper = sourceMapper;
@@ -144,6 +148,22 @@ public class MessageEventHandler implements MessageEvent {
                         .setMsgContext("[" + u.getNickName() + "] " + type.getName());
                 pushMsg(toId, notice);
             }
+            case AUDIT -> {
+                // 审核事件, 有好友和审核入群两种事件
+                String toId = message.getToId();
+                String fromId = message.getFromId();
+                InviteType type = InviteType.valueOf(message.getMsgContext());
+                switch (type) {
+                    case GROUP -> // 审核入群的事件就绑定一条记录就行
+                            userGroupMapper.insert(new UserGroup().setUserId(fromId).setGroupId(Long.valueOf(toId)));
+                    case FRIEND -> {
+                        // 好友事件比较简单, 插入两条双向关联的记录就行
+                        userUserMapper.insert(new UserUser().setUserId(fromId).setFriendId(toId).setMute(false));
+                        userUserMapper.insert(new UserUser().setFriendId(fromId).setUserId(toId).setMute(false));
+                    }
+                }
+            }
+
         }
     }
 
