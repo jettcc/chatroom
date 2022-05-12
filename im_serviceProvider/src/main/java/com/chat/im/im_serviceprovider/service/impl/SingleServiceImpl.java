@@ -7,16 +7,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chat.im.im_common.entity.dto.UserGroup;
 import com.chat.im.im_common.entity.dto.UserUser;
 import com.chat.im.im_common.entity.entity.BaseUser;
+import com.chat.im.im_common.entity.entity.Group;
 import com.chat.im.im_common.entity.entity.Message;
+import com.chat.im.im_common.entity.enumeration.MsgEnum;
 import com.chat.im.im_common.entity.enumeration.Role;
-import com.chat.im.im_common.mapper.BaseUserMapper;
-import com.chat.im.im_common.mapper.MessageMapper;
-import com.chat.im.im_common.mapper.UserGroupMapper;
-import com.chat.im.im_common.mapper.UserUserMapper;
+import com.chat.im.im_common.mapper.*;
+import com.chat.im.im_serviceprovider.dto.single.SelectGroupDTO;
 import com.chat.im.im_serviceprovider.dto.single.SelectUserDTO;
 import com.chat.im.im_serviceprovider.service.SingleService;
 import com.chat.im.im_serviceprovider.vo.account.UserInfoVO;
 import com.chat.im.im_serviceprovider.vo.message.GetMessageVO;
+import com.chat.im.im_serviceprovider.vo.single.SelectGroupVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,12 +32,14 @@ public class SingleServiceImpl implements SingleService {
     private final UserUserMapper userUserMapper;
     private final UserGroupMapper userGroupMapper;
     private final MessageMapper messageMapper;
+    private final GroupMapper groupMapper;
 
-    public SingleServiceImpl(BaseUserMapper baseUserMapper, UserUserMapper userUserMapper, UserGroupMapper userGroupMapper, MessageMapper messageMapper) {
+    public SingleServiceImpl(BaseUserMapper baseUserMapper, UserUserMapper userUserMapper, UserGroupMapper userGroupMapper, MessageMapper messageMapper, GroupMapper groupMapper) {
         this.baseUserMapper = baseUserMapper;
         this.userUserMapper = userUserMapper;
         this.userGroupMapper = userGroupMapper;
         this.messageMapper = messageMapper;
+        this.groupMapper = groupMapper;
     }
 
     @Override
@@ -44,6 +47,7 @@ public class SingleServiceImpl implements SingleService {
         QueryWrapper<Message> qw = new QueryWrapper<>();
         qw.eq("from_id", uid);
         qw.eq("to_id", tarId);
+        qw.eq("msg_type", MsgEnum.CHAT);
         return new Page<GetMessageVO>(page, size)
                 .setRecords(messageMapper.selectPage(new Page<>(page, size), qw)
                         .getRecords().stream().map(GetMessageVO::new).toList());
@@ -71,6 +75,14 @@ public class SingleServiceImpl implements SingleService {
         QueryWrapper<Message> qw = new QueryWrapper<>();
         qw.eq("id", msgId);
         messageMapper.delete(qw);
+    }
+
+    @Override
+    public SelectGroupVO selectGroup(SelectGroupDTO dto) {
+        QueryWrapper<Group> qw = new QueryWrapper<>();
+        Optional.ofNullable(dto.getId()).ifPresent(id -> qw.eq("id", id));
+        Optional.ofNullable(dto.getName()).ifPresent(name -> qw.eq("name", name));
+        return new SelectGroupVO(groupMapper.selectOne(qw));
     }
 
     @Override

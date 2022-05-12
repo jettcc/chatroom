@@ -1,9 +1,11 @@
 package com.chat.im.im_serviceprovider.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.chat.im.im_serviceprovider.dto.single.SelectGroupDTO;
 import com.chat.im.im_serviceprovider.dto.single.SelectUserDTO;
 import com.chat.im.im_serviceprovider.vo.account.UserInfoVO;
 import com.chat.im.im_serviceprovider.vo.message.GetMessageVO;
+import com.chat.im.im_serviceprovider.vo.single.SelectGroupVO;
 
 import java.util.List;
 
@@ -44,6 +46,7 @@ public interface SingleService {
      */
     void remove(Long msgId);
 
+    SelectGroupVO selectGroup(SelectGroupDTO dto);
     /**
      * 加入指定群聊
      *

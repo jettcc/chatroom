@@ -1,7 +1,6 @@
 package com.chat.im.im_serviceprovider.vo.message;
 
 import com.chat.im.im_common.entity.entity.Message;
-import com.chat.im.im_common.entity.enumeration.MsgEnum;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
@@ -17,6 +16,9 @@ import java.util.Optional;
 @Getter
 @Setter
 public class GetMessageVO {
+    @ApiModelProperty("id")
+    private Long id;
+
     @ApiModelProperty("发送时间")
     private String createTime;
 
